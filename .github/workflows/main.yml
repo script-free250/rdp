@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: تنزيل وتثبيت Chrome Remote Desktop
         run: |
-          Invoke-WebRequest -Uri "https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktop.msi" -OutFile "crd.msi"
+          Invoke-WebRequest -Uri "https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi" -OutFile "crd.msi"
           Start-Process -Wait -FilePath msiexec.exe -ArgumentList "/i crd.msi /quiet /qn /norestart"
 
       - name: تفعيل الـ RDP
