@@ -1,0 +1,30 @@
+name: Browser RDP (Chrome Remote Desktop)
+
+on:
+  workflow_dispatch:
+    inputs:
+      crd_command:
+        description: '& "${Env:PROGRAMFILES(X86)}\Google\Chrome Remote Desktop\CurrentVersion\remoting_start_host.exe" --code="4/0AfrIepDJMl0ia5tCIEmGKidGjRmq_qehK_bha6ONPJsZSfJuJh5gVDc6P_p4JxGBWdU4SA" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$Env:COMPUTERNAME'
+        required: true
+      pin:
+        description: '123456
+        required: true
+        default: '123456'
+
+jobs:
+  rdp-session:
+    runs-on: windows-latest
+    steps:
+      - name: تنزيل وتثبيت Chrome Remote Desktop
+        run: |
+          Invoke-WebRequest -Uri "https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktop.msi" -OutFile "crd.msi"
+          Start-Process -Wait -FilePath msiexec.exe -ArgumentList "/i crd.msi /quiet /qn /norestart"
+
+      - name: تفعيل الـ RDP
+        run: |
+          ${{ github.event.inputs.crd_command }} -pin=${{ github.event.inputs.pin }}
+
+      - name: الحفاظ على الجلسة (Keep Alive)
+        run: |
+          Write-Host "الـ RDP جاهز الآن! يمكنك الاتصال من المتصفح."
+          Start-Sleep -Seconds 21600
